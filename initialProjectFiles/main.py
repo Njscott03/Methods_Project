@@ -61,10 +61,23 @@ def mainMenu(user, cart, inventory, history):
             user.logout()
 
             print("Successful logout.")
-            
-        if(option == "1)
-        
 
+        ## View Account Information
+        if(option == "1"):
+            user.viewAccountInformation()
+
+        ## Inventory Information
+        if(option == "2"):
+            inventory.inventoryMenu(user)
+            
+        ## Cart Information
+        if(option == "3"):
+            cart.cartMenu(user)    
+
+        ## Order Information
+        if(option == "4"):
+            history.orderMenu(user)    
+               
         print()
         ## incorrect menu option
         else:
@@ -72,20 +85,6 @@ def mainMenu(user, cart, inventory, history):
 
         print()
 
-def CaryMenu():
-        while(1)
-            print("Cart Information Menu:")
-            print("0. View Cart")
-            print("1. Add To Cart")
-            print("2. Remove From Cart")
-            print("3. Check Out")
-            print("4. Leave Cart Information")
-            initial = input("Enter your menu choice: ")
-
-
-            print()
-
-            ## add in break option to exit menu loop
 
 
 
