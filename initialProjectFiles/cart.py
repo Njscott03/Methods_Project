@@ -1,25 +1,74 @@
-class Cart:
+from user import *
+import sqlite3
+import sys
+
 ## class belongs to Dominic
 ## should interact with user 
 ## to link userID to the cart transaction
-    def __init__(self):
-        data = "starting information"
+class Cart:
 
-""" Copy & paste of Design Document
+    ##constructor
+    def __init__(self):        ## does the database have to be the same as the user database?
+        self.database = user.database
+        databaseName: string
+        
+    def cartMenu(user): ## receving user class to track userID to cart
+        while(1)
+            print("Cart Information Menu:")
+            print("0. Leave Cart Information")
+            print("1. View Cart")
+            print("2. Add To Cart")
+            print("3. Remove From Cart")
+            print("4. Check Out")
+            
+            cartOption = input("Enter your menu choice: ")
 
- Cart
-- databaseName: string
-+ Cart()
-+ Cart(string databaseName)
-+ viewCart(string userID): void
-+ addToCart(string userID, string ISBN, int quantity): void
-+ removeFromCart(string userID, string ISBN): void
-+ checkOut(string userID): void
+            ## Leave Cart Information
+            if(option == "0"):
+                break
+    
+            ## View Cart
+            if(option == "1"):
+                cart.viewCart(user.userID())   ## test if the () after userID is needed
+                
+            ## Add To Cart
+            if(option == "2"):
+                cart.viewCart(user.userID(), ISBN, quantity)
+                
+            ## Remove From Cart
+            if(option == "3"):
+                cart.viewCart(user.userID(), ISBN)
+    
+            ## Check Out
+            if(option == "4"):
+                cart.viewCart(user.userID())
 
-"""
+
+        
+        print("Successfully Left Cart Information.")
+        print()
+
+    def viewCart(string userID): 
+        ## display database linked to cart
+        
+    def addToCart(string userID, string ISBN, int quantity): 
+        ## add to database linked to cart
+    
+    def removeFromCart(string userID, string ISBN): 
+        ## remove from database linked to cart
+        
+    def checkOut(string userID): 
+        ## calls inventory to decrease stock
+        ## calls orderHistory to make an order and fill out that order
+        
+
 """      TO DO------------------
-        -set up a phoney menu for the cart // do before check in 2
+        -fix cart initialization
         -figure out how to interact with the database using python code.
+        -Prioritize completing Add and view cart
+        -Prioritize completing remove from cart
+        -finish checkout -----------------takes the longest so dont procrastinate
+        
         
         
         
