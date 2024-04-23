@@ -47,6 +47,7 @@ class Cart:
         
         print("Successfully Left Cart Information.")
         print()
+        print("ending cart.py")
 
     def viewCart(string userID): 
         ## display database linked to cart
@@ -67,9 +68,14 @@ class Cart:
         -figure out how to interact with the database using python code.
         -Prioritize completing Add and view cart
         -Prioritize completing remove from cart
-        -finish checkout -----------------takes the longest so dont procrastinate
-        
-        
-        
-        
+        -finish checkout -----------------takes the longest so dont procrastinate 
 """
+
+## while testing seperatly from main
+    def main():
+        print("inside cart class")
+        user = User()
+        cart = Cart()
+        cart.cartMenu(user)
+              
+main()
