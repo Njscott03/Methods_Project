@@ -9,10 +9,9 @@ class Cart:
 
     ##constructor
     def __init__(self):        ## does the database have to be the same as the user database?
-        self.database = user.database
-        databaseName: string
+        self.cartDatabaseName = "cartDB.db"
         
-    def cartMenu(user): ## receving user class to track userID to cart
+    def cartMenu(self,user,cart): ## receving user class to track userID to cart
         while(1):
             print("Cart Information Menu:")
             print("0. Leave Cart Information")
@@ -28,54 +27,84 @@ class Cart:
                 break
     
             ## View Cart
-            if(option == "1"):
-                cart.viewCart(user.userID())   ## test if the () after userID is needed
+            if(cartOption == "1"):
+                cart.viewCart()   
                 
             ## Add To Cart
-            if(option == "2"):
-                cart.viewCart(user.userID(), ISBN, quantity)
+            if(cartOption == "2"):
+                cart.viewCart(self, ISBN, quantity)
                 
             ## Remove From Cart
-            if(option == "3"):
-                cart.viewCart(user.userID(), ISBN)
+            if(cartOption == "3"):
+                cart.viewCart(self,ISBN)
     
             ## Check Out
-            if(option == "4"):
-                cart.viewCart(user.userID())
+            if(cartOption == "4"):
+                cart.viewCart(self,user.userID())
 
 
         
         print("Successfully Left Cart Information.")
         print()
         print("ending cart.py")
+def viewCart(self): 
+        cursor.execute(cart)
+        print("end of the line buddy")
 
-    def viewCart(string userID): 
-        ## display database linked to cart
         
-    def addToCart(string userID, string ISBN, int quantity): 
-        ## add to database linked to cart
     
-    def removeFromCart(string userID, string ISBN): 
+    def addToCart(ISBN, quantity): 
+        ## add to database linked to cart
+        a
+    
+    def removeFromCart(ISBN): 
         ## remove from database linked to cart
-        
-    def checkOut(string userID): 
+        a
+    
+    def checkOut(userID): 
         ## calls inventory to decrease stock
         ## calls orderHistory to make an order and fill out that order
-        
+        a
+    
 
 """      TO DO------------------
-        -fix cart initialization
-        -figure out how to interact with the database using python code.
         -Prioritize completing Add and view cart
         -Prioritize completing remove from cart
         -finish checkout -----------------takes the longest so dont procrastinate 
 """
 
 ## while testing seperatly from main
-    def main():
-        print("inside cart class")
+def main():
+        print("Welcome")
         user = User()
-        cart = Cart()
-        cart.cartMenu(user)
+        temp = Cart()
+        
+        print("Testing for cartDB.db file")
+        try:
+            connection = sqlite3.connect(temp.cartDatabaseName)
+
+        except:
+            print("Failed database connection.")
+
+            ## exits the program if unsuccessful
+            sys.exit()
+        cursor = connection.cursor()
+
+        ## checks if the table cart already exists
+        test = """SELECT (EXISTS(SELECT name FROM sqlite_master WHERE type='table' AND name='Cart'));"""
+
+        ##if the table doesnt exist, creates a table
+        if  cursor.execute(test)== 0:
+            cart = """CREATE TABLE Cart (
+                UserID varchar(7) NOT NULL,
+                ISBN varchar(14) NOT NULL,
+                Quantity int(3),
+                FOREIGN KEY(UserID) REFERENCES User(UserID),
+                FOREIGN KEY(ISBN) REFERENCES Inventory(ISBN)
+            );"""
+            cursor.execute(cart)
+
+        ## calls the menu above
+        temp.cartMenu(user,temp)
               
 main()
