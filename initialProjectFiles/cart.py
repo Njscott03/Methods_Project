@@ -68,6 +68,7 @@ def viewCart(self):
     
 
 """      TO DO------------------
+        -link userID to cart
         -Prioritize completing Add and view cart
         -Prioritize completing remove from cart
         -finish checkout -----------------takes the longest so dont procrastinate 
