@@ -11,24 +11,23 @@ class Inventory:
         while(True):
             print()
             print("Inventory Menu:")
-            print("0. Leave Inventory")
-            print("1. View Inventory")
-            print("2. Search for Book")
-            print("3. Decrease Quantity")
+            print("0. View Inventory")
+            print("1. Search for Book")
+            print("2. Decrease Quantity")
+            print("3. Leave Inventory")
+            print()
             
             inventChoice = input("What would you like to do (Type #)? ")
+            print()
             
             match inventChoice:
                 case "0":
-                    break
-                case "1":
                     self.viewInventory()
-                    break
-                case "2":
+                case "1":
                     self.searchInventory()
-                    break
-                case "3":
+                case "2":
                     self.decreaseStock()
+                case "3":
                     break
                 case _:
                     print("That is not a valid option. Try again.")
@@ -53,10 +52,31 @@ class Inventory:
         print(cursor.fetchall())
         cursor.close()
 
-    def searchInevntory(self):
-        x = 1
+    def searchInventory(self):
+        bookTitle = input("What is the name of the book? ")
+        print()
+        try:
+            connection = sqlite3.connect(self.databaseName)
 
-    def descreaseStock(self):
+        except:
+            print("Failed database connection.")
+
+            ## exits the program if unsuccessful
+            sys.exit()
+        cursor = connection.cursor()
+
+        ## selects all information
+        query = "SELECT * FROM Inventory WHERE Title = '" + bookTitle + "'"
+        
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if (len(result) == 0):
+            print("There is no book with this name.")
+        else:
+            print(result)
+        cursor.close()
+
+    def decreaseStock(self):
         x = 1
 
         
