@@ -26,7 +26,10 @@ class Inventory:
                 case "1":
                     self.searchInventory()
                 case "2":
-                    self.decreaseStock()
+                    ISBN = input("What ISBN would you like to decrease? ")
+                    quantity = input("How many? ")
+
+                    self.decreaseStock(ISBN, quantity)
                 case "3":
                     break
                 case _:
@@ -65,10 +68,10 @@ class Inventory:
             sys.exit()
         cursor = connection.cursor()
 
-        ## selects all information
-        query = "SELECT * FROM Inventory WHERE Title = '" + bookTitle + "'"
-        
-        cursor.execute(query)
+        ## queries the title of the book and pulls all info
+        query = "SELECT * FROM Inventory WHERE Title=?"
+        data = (str(bookTitle),)
+        cursor.execute(query, data)
         result = cursor.fetchall()
         if (len(result) == 0):
             print("There is no book with this name.")
@@ -76,7 +79,33 @@ class Inventory:
             print(result)
         cursor.close()
 
-    def decreaseStock(self):
-        x = 1
+    def decreaseStock(self, ISBN, quantity):
+        try:
+            connection = sqlite3.connect(self.databaseName)
+
+        except:
+            print("Failed database connection.")
+
+            ## exits the program if unsuccessful
+            sys.exit()
+        cursor = connection.cursor()
+
+        ## checks if the ISBN is in the inventory
+        query = "SELECT * FROM Inventory WHERE ISBN=?"
+        data = (str(ISBN),)
+        cursor.execute(query, data)
+        result = cursor.fetchall()
+        newStock = int(result[0][7]) - int(quantity)
+
+        if (len(result) == 0):
+            print("There is no book with this ISBN.")
+        ## executes the update once ISBN is verified
+        else:
+
+            query = "UPDATE Inventory SET Stock=? WHERE ISBN=?"
+            data = (str(newStock), str(ISBN),)
+            cursor.execute(query, data)
+            connection.commit()
+        cursor.close()
 
         
