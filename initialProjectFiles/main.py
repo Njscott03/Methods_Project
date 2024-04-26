@@ -3,14 +3,14 @@ from cart import *
 from inventory import *
 from history import *
 
+user = User()
+cart = Cart()
+inventory = Inventory()
+history = OrderHistory()
 
 ## COMPLETE initial pre-login menu
 def initialMenu():
     ## objects for the classes
-    user = User()
-    cart = Cart()
-    inventory = Inventory()
-    history = OrderHistory()
 
     ## initial menu
     while(1):
@@ -63,22 +63,21 @@ def mainMenu(user, cart, inventory, history):
             print("Successful logout.")
 
         ## View Account Information
-        if(option == "1"):
+        elif(option == "1"):
             user.viewAccountInformation()
 
         ## Inventory Information
-        if(option == "2"):
-            inventory.inventoryMenu(user)
+        elif(option == "2"):
+            inventory.inventMenu()
             
         ## Cart Information
-        if(option == "3"):
+        elif(option == "3"):
             cart.cartMenu(user)    
 
         ## Order Information
-        if(option == "4"):
+        elif(option == "4"):
             history.orderMenu(user)    
                
-        print()
         ## incorrect menu option
         else:
             print("That's not a menu option. Please try again.")
