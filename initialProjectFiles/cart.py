@@ -156,11 +156,11 @@ class Cart:
             
             ## removing user input quantity from table quantity
             query = "UPDATE Cart SET Quantity = Quantity -" + quantity + " WHERE UserID = '" + userID + "' AND ISBN = '" + ISBN + "';"
-            print(query)
             cursor.execute(query)
 
-            ## add a check to see if any items have a quantity of 0
-            ## if so remove that item from the table----------------------------------
+            ## removes any items w/  < 1 quantity
+            query = "Delete FROM Cart Where userID = '"+ userID + "' AND Quantity < 1"
+            cursor.execute(query)
             connection.commit()
         
         cursor.close()
