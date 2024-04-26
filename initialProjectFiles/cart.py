@@ -1,4 +1,6 @@
 from user import *
+from history import *
+from inventory import *
 import sqlite3
 import sys
 
@@ -50,7 +52,7 @@ class Cart:
     
             ## Check Out
             if(cartOption == "4"):
-                cart.checkOut(userID)
+                cart.checkOut(userID,history,order,inventory)
 
 
         
@@ -165,16 +167,21 @@ class Cart:
         
         cursor.close()
     
-    def checkOut(userID): 
-        ## calls inventory to decrease stock
+    def checkOut(self,userID,order,inventory): 
         ## calls orderHistory to make an order and fill out that order
-        ## delete the entire cart contents relating to a specific user 
-        a
+     
+        inventory.decreaseStock()
+        order.makeOrder(userID)
+        
+        ##fix loop, using a cursor.execute(query) where
+        for items in cart:
+            order.addToOrder(userID,ISBN Quantity)
+        
+        ##add delete cart query
     
 
 """      TO DO------------------
         -fix cart initialization
-        -add a delete from table when quantity = 0
         -finish checkout -----------------takes the longest so dont procrastinate 
 """
 
@@ -183,6 +190,8 @@ def main():
         print("Welcome")
         user = User()
         temp = Cart()
+        inventory = inventory()
+        order = orderHistory()
         
         print("Testing for cartDB.db file")
         try:
