@@ -1,4 +1,4 @@
-from user import *
+rom user import *
 from inventory import *
 import sqlite3
 import sys
@@ -12,22 +12,44 @@ class OrderHistory:
         databaseName = "OrderDB.db"
         secondDatabaseName = "OrderItems.db"
         self.orderDatabaseName = databaseName
-        self.secondDatabaseName = secondDatabaseName
+        self.itemsDatabaseName = secondDatabaseName
     
   
-    
-    def viewHistory(userID):
+        ## table of orders
+    def viewHistory(self,userID):
         ##if either table doesnt exist make them
+        
+        try:
+            connection = sqlite3.connect(self.orderDatabaseName)
+
+        except:
+            print("Failed database connection.")
+
+            ## exits the program if unsuccessful
+            sys.exit()
+        cursor = connection.cursor()
+
+        orderID = input("Input Order ID:")
+        ## selects all information
+        query = "SELECT ItemNumber,Cost,Date FROM Orders WHERE UserID ='" + userID + "'"
+        print("Orders (ItemNumber, Cost, Date):")
+        
+        cursor.execute(query)
+        print(cursor.fetchall()) ## i want to format the print...but it seems like an ungodly amount of work
+        cursor.close()
+
+
+        ## table of items
+    def viewOrder(self,userID, orderID): 
+        a
+        ##calls some function from inventory to display orderItems
+        
+    def createOrder(self,userID, quantity, cost, date):
         a
         
-    def viewOrder(userID, orderID): 
+    def addOrderItems(self, userID, orderID):
         a
-        
-    def createOrder(userID, quantity, cost, date):
-        a
-        
-    def addOrderItems(userID, orderID):
-        a
+
 
     def historyMenu(self,userID,inventory,history):
         print("inside gistoa")
@@ -57,9 +79,7 @@ class OrderHistory:
                 
             ## View Order
             if(historyOption == "2"):
-                ISBN = input("What is the ISBN:")
-                quantity = input("What is the quantity:")
-                cart.addToCart(ISBN, quantity,userID)
+                history.viewOrder(userID, orderID)
                 
             ## Create Order
             if(historyOption == "3"):
@@ -79,6 +99,11 @@ class OrderHistory:
         print("ending history.py")
 
 
+""" TO DO--------------------------------------------
+-change how view order works
+-make createOrder
+-make addOrderItems
+"""
 def main():
         print("Welcome")
         user = User()
