@@ -87,7 +87,7 @@ class Cart:
     
             ## Check Out
             if(cartOption == "4"):
-                self.checkOut(userID,order,inventory)
+                self.checkOut(userID,history,inventory)
 
 
         
@@ -110,9 +110,6 @@ class Cart:
         cursor = connection.cursor()
 
 
-
-
-        
         ## selects all a tuple of Cart's ISBN
         query = "SELECT ISBN FROM Cart WHERE Cart.UserID ='" + userID + "'"
         cursor.execute(query)
@@ -141,8 +138,6 @@ class Cart:
             print("---------------------------------")
 
         
-
-            
         cursor.close()
         
 
@@ -150,9 +145,6 @@ class Cart:
 
         
     def addToCart(self,ISBN,quantity,userID):
-
-        
-
         ## add to a database linked to cart
         
         try:
@@ -227,7 +219,6 @@ class Cart:
                 
     
     def removeFromCart(self,ISBN,userID,quantity): 
-        ## remove from a database linked to cart
         
         try:
             connection = sqlite3.connect(self.databaseName)
@@ -267,21 +258,41 @@ class Cart:
         
         cursor.close()
     
-    def checkOut(self,userID,order,inventory): 
+    def checkOut(self,userID,history,inventory): 
         ## calls orderHistory to make an order and fill out that order
-     
-        inventory.decreaseStock()
-        order.makeOrder(userID)
+        try:
+            connection = sqlite3.connect(self.databaseName)
+            
+        except:
+            print("Failed database connection.")
+
+            ## exits the program if unsuccessful
+            sys.exit()
+        cursor = connection.cursor()
+            
+        date = "4/29/24"
+        history.createOrder(userID,0,0,date)
+
+        query = "SELECT ISBN FROM Cart WHERE userID ='" + userID + "'"
+        cursor.execute(query)
+        cartISBNtuple = cursor.fetchall()
         
         ##fix loop, using a cursor.execute(query) where
-        for items in cart:
-            order.addToOrder(userID,ISBN,Quantity)
+        for ISBNs in cartISBNtuple:
+            currentISBN = ISBNs[0]
+             
+            query = "SELECT Quantity FROM Cart Where ISBN ='" + currentISBN + "' AND UserID ='" + userID + "'"
+            
+            cursor.execute(query)
+            Quantity = cursor.fetchone()
+            quantity = Quantity[0]
+            strQuantity = str(quantity)
+            
+            
+            history.addOrderItems(userID,currentISBN,quantity)
+            inventory.decreaseStock(currentISBN, quantity)
+            self.removeFromCart(currentISBN,userID,strQuantity)
         
-        ##add delete cart query
     
-
-"""      TO DO------------------
-        -fix cart initialization
-        -finish checkout -----------------takes the longest so dont procrastinate 
-"""
+    
 
