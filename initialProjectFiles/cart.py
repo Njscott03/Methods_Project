@@ -68,24 +68,26 @@ class Cart:
                 break
     
             ## View Cart
-            if(cartOption == "1"):
+            elif(cartOption == "1"):
                 self.viewCart(userID)   
                 
             ## Add To Cart
-            if(cartOption == "2"):
+            elif(cartOption == "2"):
                 ISBN = input("What is the ISBN:")
                 quantity = input("What is the quantity:")
                 self.addToCart(ISBN, quantity,userID)
                 
             ## Remove From Cart
-            if(cartOption == "3"):
+            elif(cartOption == "3"):
                 ISBN = input("What is the ISBN:")
                 self.removeFromCart(ISBN,userID)
     
             ## Check Out
-            if(cartOption == "4"):
+            elif(cartOption == "4"):
                 self.checkOut(userID,history,inventory)
 
+            elif(1):
+                print("That's not a menu option. Please try again.")
 
         
         print("Successfully Exited Cart Information.")
@@ -152,7 +154,9 @@ class Cart:
             ## exits the program if unsuccessful
             sys.exit()
         cursor = connection.cursor()
-        
+
+
+
          ## test valid ISBN
         query = "SELECT ISBN FROM Inventory WHERE Stock > 0"
         cursor.execute(query)
@@ -164,8 +168,10 @@ class Cart:
                 isValid = True
         if isValid == False:
             print("The entered ISBN is invalid please reference inventory to make sure the item is in stock")
+            
             return
 
+        
         ## test valid quantity
         query = "Select Stock FROM Inventory WHERE ISBN ='" + ISBN + "'"
         cursor.execute(query)
@@ -188,15 +194,16 @@ class Cart:
             ## Inserts book into table
             query = "INSERT INTO Cart (UserID, ISBN, Quantity) VALUES ('" + userID +"','" + ISBN + "','" + quantity + "')"
             
+            
         else:
             
             ## adding user input quantity to table quantity
             query = "Select Quantity FROM Cart WHERE ISBN ='" + ISBN + "'" + "AND UserID ='" + userID + "'"
             cursor.execute(query)
             cartQuantity = cursor.fetchone()
-        
-            if stock[0] - (int(quantity) + int(cartQuantity[0])) < 1:
-                print("Your total quantity exceeds the current stock.")
+
+            if stock[0] - (int(quantity) + int(cartQuantity[0]))< 0:
+                print("Your quantity exceeds the current stock.")
                 return
             
             query = "UPDATE Cart SET Quantity = Quantity +" + quantity + " WHERE UserID = '" + userID + "' AND ISBN = '" + ISBN + "';"
@@ -234,7 +241,6 @@ class Cart:
 
         cursor.execute(test)
         results = cursor.fetchone()
-        print(results)
 
         cursor.execute(test)
         ## checking if is inside the table
@@ -246,9 +252,18 @@ class Cart:
             return
         else:
         ##item exists
+
+            query = "SELECT Quantity FROM Cart Where ISBN ='" + ISBN + "' AND UserID ='" + userID + "'"
+            cursor.execute(query)
+            
+            Quantity = cursor.fetchone()
+            quantity = Quantity[0]
+            strQuantity = str(quantity)
+            
+            
             
             ## removing user input quantity from table quantity
-            query = "UPDATE Cart SET Quantity = Quantity -" + quantity + " WHERE UserID = '" + userID + "' AND ISBN = '" + ISBN + "';"
+            query = "UPDATE Cart SET Quantity = Quantity -" + strQuantity + " WHERE UserID = '" + userID + "' AND ISBN = '" + ISBN + "';"
             cursor.execute(query)
 
             ## removes any items w/  < 1 quantity
@@ -288,10 +303,13 @@ class Cart:
             strQuantity = str(quantity)
             
             
-            history.addOrderItems(userID,orderID,quantity)
+            history.addOrderItems(userID,currentISBN,quantity)
             inventory.decreaseStock(currentISBN, quantity)
 
             ## passes quantity as a string because it is concatonated
             ## in an sql query
             self.removeFromCart(currentISBN,userID)
+        
+    
+    
 
