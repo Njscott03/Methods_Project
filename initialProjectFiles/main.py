@@ -76,7 +76,7 @@ def mainMenu(user, cart, inventory, history):
 
         ## Order Information
         elif(option == "4"):
-            history.orderMenu(user)    
+            history.orderMenu(user,history,inventory)    
                
         ## incorrect menu option
         else:
