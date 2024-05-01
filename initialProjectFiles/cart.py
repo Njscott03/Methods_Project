@@ -14,7 +14,7 @@ class Cart:
         self.databaseName = "Methods.db"
 
 
-        
+        ## uses initialized classes to call their 
     def cartMenu(self,user,history,inventory): ## receving user class to track userID to cart
         
         print("Testing for the database file...")
@@ -61,7 +61,6 @@ class Cart:
             print("4. Check Out")
             
             userID = user.getUserID()
-            
             cartOption = input("Enter your menu choice: ")
             
             ## Leave Cart Information
@@ -81,8 +80,6 @@ class Cart:
             ## Remove From Cart
             if(cartOption == "3"):
                 ISBN = input("What is the ISBN:")
-                quantity = input("What is the quantity you want to remove:")
-
                 self.removeFromCart(ISBN,userID)
     
             ## Check Out
@@ -91,9 +88,8 @@ class Cart:
 
 
         
-        print("Successfully Left Cart Information.")
+        print("Successfully Exited Cart Information.")
         print()
-        print("ending cart.py")
 
 
     def viewCart(self,userID):
@@ -108,13 +104,6 @@ class Cart:
             ## exits the program if unsuccessful
             sys.exit()
         cursor = connection.cursor()
-
-        ## grabs quantity from a sql query
-        query = "SELECT Quantity FROM Cart Where ISBN ='" + ISBN + "' AND UserID ='" + userID + "'"
-        cursor.execute(query)
-            
-        Quantity = cursor.fetchone()
-        quantity = str(Quantity[0])
 
 
         ## selects all a tuple of Cart's ISBN
@@ -186,7 +175,7 @@ class Cart:
         cursor.execute(query)
         stock = cursor.fetchone()
         
-        if stock[0] - int(quantity) < 1:
+        if stock[0] - int(quantity) < 0:
             print("Your quantity exceeds the current stock.")
             return
         
@@ -211,7 +200,7 @@ class Cart:
             cursor.execute(query)
             cartQuantity = cursor.fetchone()
         
-            if stock[0] - (int(quantity) + cartQuantity[0]) < 0:
+            if stock[0] - (int(quantity) + cartQuantity[0]) < 1:
                 print("Your total quantity exceeds the current stock.")
                 return
             
@@ -225,7 +214,7 @@ class Cart:
 
                 
     
-    def removeFromCart(self,ISBN,userID,quantity): 
+    def removeFromCart(self,ISBN,userID): 
         
         try:
             connection = sqlite3.connect(self.databaseName)
@@ -237,6 +226,15 @@ class Cart:
             sys.exit()
         cursor = connection.cursor()
 
+
+        query = "SELECT Quantity FROM Cart Where ISBN ='" + ISBN + "' AND UserID ='" + userID + "'"
+        cursor.execute(query)
+            
+        Quantity = cursor.fetchone()
+        quantity = str(Quantity[0])
+
+
+        
         ## checks if the item exists in the table
         test = "SELECT UserID FROM Cart WHERE userID = '" + userID + "' AND ISBN = '" + ISBN + "';"
 
@@ -278,7 +276,7 @@ class Cart:
         cursor = connection.cursor()
             
         date = "4/29/24"
-        history.createOrder(userID,0,0,date)
+        orderID = history.createOrder(userID,0,0,date)
 
         query = "SELECT ISBN FROM Cart WHERE userID ='" + userID + "'"
         cursor.execute(query)
@@ -287,19 +285,18 @@ class Cart:
         ##fix loop, using a cursor.execute(query) where
         for ISBNs in cartISBNtuple:
             currentISBN = ISBNs[0]
-             
             query = "SELECT Quantity FROM Cart Where ISBN ='" + currentISBN + "' AND UserID ='" + userID + "'"
-            
             cursor.execute(query)
+            
             Quantity = cursor.fetchone()
             quantity = Quantity[0]
             strQuantity = str(quantity)
             
             
-            history.addOrderItems(userID,currentISBN,quantity)
+            history.addOrderItems(userID,orderID)
             inventory.decreaseStock(currentISBN, quantity)
+
+            ## passes quantity as a string because it is concatonated
+            ## in an sql query
             self.removeFromCart(currentISBN,userID,strQuantity)
-        
-    
-    
 
