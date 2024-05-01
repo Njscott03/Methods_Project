@@ -226,7 +226,6 @@ class Cart:
         cursor.execute(query)
             
         Quantity = cursor.fetchone()
-        quantity = str(Quantity[0])
 
 
         
@@ -243,7 +242,8 @@ class Cart:
         ## item doesn't exist
             
             print("That ISBN is not in your cart")
-            
+            cursor.close()
+            return
         else:
         ##item exists
             
