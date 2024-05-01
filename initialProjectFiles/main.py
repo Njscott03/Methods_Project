@@ -72,7 +72,7 @@ def mainMenu(user, cart, inventory, history):
             
         ## Cart Information
         elif(option == "3"):
-            cart.cartMenu(user)    
+            cart.cartMenu(user, history, inventory)    
 
         ## Order Information
         elif(option == "4"):
