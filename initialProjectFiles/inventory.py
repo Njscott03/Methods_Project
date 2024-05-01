@@ -7,7 +7,7 @@ class Inventory:
     def __init__(self, databaseName="methods.db"):
         self.databaseName = databaseName
 
-    def inventMenu(self): ## receving user class to track userID to cart
+    def inventMenu(self): ## inventory menu
         while(True):
             print()
             print("Inventory Menu:")
@@ -19,7 +19,7 @@ class Inventory:
             
             inventChoice = input("What would you like to do (Type #)? ")
             print()
-            
+            ## handles user choice in menu
             match inventChoice:
                 case "0":
                     self.viewInventory()

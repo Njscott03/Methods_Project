@@ -293,5 +293,5 @@ class Cart:
 
             ## passes quantity as a string because it is concatonated
             ## in an sql query
-            self.removeFromCart(currentISBN,userID,strQuantity)
+            self.removeFromCart(currentISBN,userID)
 
