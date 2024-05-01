@@ -13,14 +13,11 @@ class Cart:
     def __init__(self):        
         self.databaseName = "Methods.db"
 
-
         ## uses initialized classes to call their 
     def cartMenu(self,user,history,inventory): ## receving user class to track userID to cart
-        
         print("Testing for the database file...")
         try:
             connection = sqlite3.connect(self.databaseName)
-
         except:
             print("Failed database connection.")
 
@@ -34,7 +31,7 @@ class Cart:
         cursor.execute(test)
         
         ##if the table doesnt exist, creates a table
-        if  cursor.fetchone()== None:   ##cursor.execute(test)
+        if  cursor.fetchone()== None:   
             query = """CREATE TABLE Cart (
                 UserID varchar(7) NOT NULL,
                 ISBN varchar(14) NOT NULL,
@@ -46,10 +43,6 @@ class Cart:
            
             connection.commit()
             cursor.close()
-        
-        
-        
-
         
         while(1):
             print()
@@ -89,27 +82,23 @@ class Cart:
             elif(cartOption == "4"):
                 self.checkOut(userID,history,inventory)
 
+            ## Invalid menu option
             elif(1):
                 print("That's not a menu option. Please try again.")
-
-        
+                
         print("Successfully Exited Cart Information.")
         print()
 
-
+    ##view a database linked to cart
     def viewCart(self,userID):
-        #view a database linked to cart
-        
         try:
             connection = sqlite3.connect(self.databaseName)
-
         except:
             print("Failed database connection.")
 
             ## exits the program if unsuccessful
             sys.exit()
         cursor = connection.cursor()
-
 
         ## selects all a tuple of Cart's ISBN
         query = "SELECT ISBN FROM Cart WHERE Cart.UserID ='" + userID + "'"
@@ -132,22 +121,17 @@ class Cart:
         print("Valid Cart Items:")
         print("[ISBN, Title, Author, Genre, Price, ReleaseDate, Stock, Pages, Quantity, UserID]")
         print()
-        
+
+        ## printing all items within the cart table
         print("---------------------------------")
         for item in view:
             print(item)
             print("---------------------------------")
-
-        
+            
         cursor.close()
         
-
-
-
-        
+         ## add to a database linked to cart
     def addToCart(self,ISBN,quantity,userID):
-        ## add to a database linked to cart
-        
         try:
             connection = sqlite3.connect(self.databaseName)
 
@@ -158,9 +142,7 @@ class Cart:
             sys.exit()
         cursor = connection.cursor()
 
-
-
-         ## test valid ISBN
+        ## test valid ISBN
         query = "SELECT ISBN FROM Inventory WHERE Stock > 0"
         cursor.execute(query)
         InventoryIsbnTuple = cursor.fetchall()
@@ -169,17 +151,17 @@ class Cart:
         for item in InventoryIsbnTuple:
             if item == (ISBN,):
                 isValid = True
+                
         if isValid == False:
             print("The entered ISBN is invalid please reference inventory to make sure the item is in stock")
-            
             return
 
-        
         ## test valid quantity
         query = "Select Stock FROM Inventory WHERE ISBN ='" + ISBN + "'"
         cursor.execute(query)
         stock = cursor.fetchone()
-        
+
+        ## test for valid quantity amount
         if stock[0] - int(quantity) < 0:
             print("Your quantity exceeds the current stock.")
             return
@@ -218,9 +200,8 @@ class Cart:
         cursor.close()
 
                 
-    
+        ## remove one item from cart table using corrosponding ISBN
     def removeFromCart(self,ISBN,userID): 
-        
         try:
             connection = sqlite3.connect(self.databaseName)
 
@@ -258,12 +239,11 @@ class Cart:
 
             query = "SELECT Quantity FROM Cart Where ISBN ='" + ISBN + "' AND UserID ='" + userID + "'"
             cursor.execute(query)
-            
+
+            ## gets quantity from cart of the specific item
             Quantity = cursor.fetchone()
             quantity = Quantity[0]
             strQuantity = str(quantity)
-            
-            
             
             ## removing user input quantity from table quantity
             query = "UPDATE Cart SET Quantity = Quantity -" + strQuantity + " WHERE UserID = '" + userID + "' AND ISBN = '" + ISBN + "';"
@@ -305,13 +285,11 @@ class Cart:
             quantity = Quantity[0]
             strQuantity = str(quantity)
             
-            
             history.addOrderItems(userID,currentISBN,quantity)
             inventory.decreaseStock(currentISBN, quantity)
-
-            ## passes quantity as a string because it is concatonated
-            ## in an sql query
             self.removeFromCart(currentISBN,userID)
+            
+        cursor.close()
         
     
     
