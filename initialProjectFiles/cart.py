@@ -75,7 +75,10 @@ class Cart:
             elif(cartOption == "2"):
                 ISBN = input("What is the ISBN:")
                 quantity = input("What is the quantity:")
-                self.addToCart(ISBN, quantity,userID)
+                if quantity != "":
+                    self.addToCart(ISBN, quantity,userID)
+                else:
+                    print("Invalid quanity please enter something.")
                 
             ## Remove From Cart
             elif(cartOption == "3"):
