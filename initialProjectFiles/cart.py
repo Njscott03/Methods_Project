@@ -152,9 +152,7 @@ class Cart:
             ## exits the program if unsuccessful
             sys.exit()
         cursor = connection.cursor()
-
-
-
+        
          ## test valid ISBN
         query = "SELECT ISBN FROM Inventory WHERE Stock > 0"
         cursor.execute(query)
@@ -166,10 +164,8 @@ class Cart:
                 isValid = True
         if isValid == False:
             print("The entered ISBN is invalid please reference inventory to make sure the item is in stock")
-            
             return
 
-        
         ## test valid quantity
         query = "Select Stock FROM Inventory WHERE ISBN ='" + ISBN + "'"
         cursor.execute(query)
@@ -192,15 +188,14 @@ class Cart:
             ## Inserts book into table
             query = "INSERT INTO Cart (UserID, ISBN, Quantity) VALUES ('" + userID +"','" + ISBN + "','" + quantity + "')"
             
-            
         else:
             
             ## adding user input quantity to table quantity
-            query = "Select Quantity FROM Cart WHERE ISBN ='" + ISBN + "'"
+            query = "Select Quantity FROM Cart WHERE ISBN ='" + ISBN + "'" + "AND UserID ='" + userID + "'"
             cursor.execute(query)
             cartQuantity = cursor.fetchone()
         
-            if stock[0] - (int(quantity) + cartQuantity[0]) < 1:
+            if stock[0] - (int(quantity) + int(cartQuantity[0])) < 1:
                 print("Your total quantity exceeds the current stock.")
                 return
             
