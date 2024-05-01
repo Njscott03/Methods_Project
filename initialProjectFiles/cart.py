@@ -83,7 +83,7 @@ class Cart:
                 ISBN = input("What is the ISBN:")
                 quantity = input("What is the quantity you want to remove:")
 
-                self.removeFromCart(ISBN,userID,quantity)
+                self.removeFromCart(ISBN,userID)
     
             ## Check Out
             if(cartOption == "4"):
@@ -108,6 +108,13 @@ class Cart:
             ## exits the program if unsuccessful
             sys.exit()
         cursor = connection.cursor()
+
+        ## grabs quantity from a sql query
+        query = "SELECT Quantity FROM Cart Where ISBN ='" + ISBN + "' AND UserID ='" + userID + "'"
+        cursor.execute(query)
+            
+        Quantity = cursor.fetchone()
+        quantity = str(Quantity[0])
 
 
         ## selects all a tuple of Cart's ISBN
