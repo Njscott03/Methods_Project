@@ -35,7 +35,6 @@ class Inventory:
                 case _:
                     print("That is not a valid option. Try again.")
             
-            break
 
     def viewInventory(self):
         try:
