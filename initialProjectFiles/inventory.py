@@ -28,8 +28,10 @@ class Inventory:
                 case "2":
                     ISBN = input("What ISBN would you like to decrease? ")
                     quantity = input("How many? ")
-
-                    self.decreaseStock(ISBN, quantity)
+                    if quantity == "":
+                        print("Please enter a quantity.")
+                    else:
+                        self.decreaseStock(ISBN, quantity)
                 case "3":
                     break
                 case _:
