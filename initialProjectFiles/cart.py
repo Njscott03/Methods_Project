@@ -204,7 +204,7 @@ class Cart:
             cursor.execute(query)
             cartQuantity = cursor.fetchone()
         
-            if stock[0] - (int(quantity) + cartQuantity[0]) < 1:
+            if stock[0] - (int(quantity) + cartQuantity[0]) < 0:
                 print("Your total quantity exceeds the current stock.")
                 return
             
