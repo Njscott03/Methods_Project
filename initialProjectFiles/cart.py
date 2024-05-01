@@ -196,7 +196,7 @@ class Cart:
         else:
             
             ## adding user input quantity to table quantity
-            query = "Select Stock FROM Cart WHERE ISBN ='" + ISBN + "'"
+            query = "Select Quantity FROM Cart WHERE ISBN ='" + ISBN + "'"
             cursor.execute(query)
             cartQuantity = cursor.fetchone()
         
