@@ -293,7 +293,7 @@ class Cart:
             strQuantity = str(quantity)
             
             
-            history.addOrderItems(userID,orderID)
+            history.addOrderItems(userID,orderID,quantity)
             inventory.decreaseStock(currentISBN, quantity)
 
             ## passes quantity as a string because it is concatonated
