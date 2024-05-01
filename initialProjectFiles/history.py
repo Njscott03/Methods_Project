@@ -1,4 +1,5 @@
-rom user import *
+from user import *
+from cart import *
 from inventory import *
 import sqlite3
 import sys
@@ -8,11 +9,8 @@ class OrderHistory:
 ## should be interacting with the cart class
 ## to get basic order information
     
-    def __init__(self):
-        databaseName = "OrderDB.db"
-        secondDatabaseName = "OrderItems.db"
+    def __init__(self, databaseName = "methods.db"):
         self.orderDatabaseName = databaseName
-        self.itemsDatabaseName = secondDatabaseName
     
   
         ## table of orders
@@ -41,14 +39,14 @@ class OrderHistory:
 
         ## table of items
     def viewOrder(self,userID, orderID): 
-        a
+        a = 1
         ##calls some function from inventory to display orderItems
         
     def createOrder(self,userID, quantity, cost, date):
-        a
+        a = 1
         
     def addOrderItems(self, userID, orderID):
-        a
+        a = 1
 
 
     def historyMenu(self,userID,inventory,history):
@@ -79,18 +77,18 @@ class OrderHistory:
                 
             ## View Order
             if(historyOption == "2"):
-                history.viewOrder(userID, orderID)
+                history.viewOrder(userID)
                 
             ## Create Order
             if(historyOption == "3"):
                 ISBN = input("What is the ISBN:")
                 quantity = input("What is the quantity you want to remove:")
 
-                cart.removeFromCart(ISBN,userID,quantity)
+                ## Cart.removeFromCart(ISBN,userID,quantity)
     
             ## Add to Order
             if(historyOption == "4"):
-                cart.checkOut(userID)
+                a = 1
 
 
         
@@ -104,19 +102,16 @@ class OrderHistory:
 -make createOrder
 -make addOrderItems
 """
-def main():
+def main(self):
         print("Welcome")
-        user = User()
-        history = OrderHistory()
-        inventory = Inventory()
 
         ## userID = user.userID()
         userID = "211B" ##should be replaced when working in tandem with user
 
         ## test one
-        print("Testing for orders.db file")
+        print("Testing for methods.db file")
         try:
-            connection = sqlite3.connect(history.orderDatabaseName)
+            connection = sqlite3.connect(self.orderDatabaseName)
 
         except:
             print("Failed database connection.")
@@ -165,6 +160,4 @@ def main():
         print("\n--------------------------------------------")
 
                 
-        history.historyMenu(userID,inventory,history)
-
-main()
+        ## history.historyMenu(userID,inventory,history)
